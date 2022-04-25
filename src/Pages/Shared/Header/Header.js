@@ -8,9 +8,9 @@ import logo from "../../../images/logo.png";
 
 const Header = () => {
   const [user] = useAuthState(auth);
-  const handleSignOut = () =>{
+  const handleSignOut = () => {
     signOut(auth);
-  }
+  };
   return (
     <Navbar
       sticky="top"
@@ -20,12 +20,15 @@ const Header = () => {
       variant="dark"
     >
       <Container>
-        <Navbar.Brand as={Link} to="/">
-          <img src={logo} height={30} alt="" />
+        <Navbar.Brand>
+          <Nav.Link  as={Link} to="/">
+            <img src={logo} height={30} alt="" />
+          </Nav.Link>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
+            <Nav.Link as={Link} to="/" >Home</Nav.Link>
             <Nav.Link href="home#services">Services</Nav.Link>
             <Nav.Link href="home#experts">Experts</Nav.Link>
             <NavDropdown title="Dropdown" id="collasible-nav-dropdown">
@@ -44,8 +47,21 @@ const Header = () => {
             <Nav.Link as={Link} to="about">
               About
             </Nav.Link>
+            {
+              user && <>
+            <Nav.Link as={Link} to="addservice">
+              Add
+            </Nav.Link>
+            <Nav.Link as={Link} to="manage">
+              Manage
+            </Nav.Link>
+              </>
+            }
             {user ? (
-              <button onClick={handleSignOut} className="btn btn-link text-decoration-none text-light">
+              <button
+                onClick={handleSignOut}
+                className="btn btn-link text-decoration-none text-light"
+              >
                 Sign Out
               </button>
             ) : (

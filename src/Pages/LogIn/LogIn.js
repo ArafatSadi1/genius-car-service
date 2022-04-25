@@ -1,9 +1,13 @@
 import React, { useRef } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useSendPasswordResetEmail, useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import {
+  useSendPasswordResetEmail,
+  useSignInWithEmailAndPassword,
+} from "react-firebase-hooks/auth";
 import auth from "../../firebase.init";
 import SocialLogIn from "../SocialLogIn/SocialLogIn";
+import PageTitle from "../Shared/PageTitle/PageTitle";
 
 const LogIn = () => {
   const navigate = useNavigate();
@@ -11,8 +15,7 @@ const LogIn = () => {
   const passwordRef = useRef("");
   const [signInWithEmailAndPassword, user, loading, error] =
     useSignInWithEmailAndPassword(auth);
-  const [sendPasswordResetEmail] =
-    useSendPasswordResetEmail(auth);
+  const [sendPasswordResetEmail] = useSendPasswordResetEmail(auth);
   const location = useLocation();
   let errorElement;
 
@@ -21,6 +24,7 @@ const LogIn = () => {
   if (user) {
     navigate(from, { replace: true });
   }
+
   if (error) {
     errorElement = <p className="text-danger">Error: {error.message}</p>;
   }
@@ -30,21 +34,19 @@ const LogIn = () => {
     const password = passwordRef.current.value;
     signInWithEmailAndPassword(email, password);
   };
-  const handleResetPassword = async () =>{
+  const handleResetPassword = async () => {
     const email = emailRef.current.value;
     await sendPasswordResetEmail(email);
-    alert('Sent email');
-  }
+    alert("Sent email");
+  };
   return (
     <div className="w-50 mx-auto">
+      <PageTitle title={"Login"}></PageTitle>
       <h2 className="text-primary text-center mt-3">Please LogIn</h2>
       <Form onSubmit={handleLogIn}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control ref={emailRef} type="email" placeholder="Enter email" />
-          <Form.Text className="text-muted">
-            We'll never share your email with anyone else.
-          </Form.Text>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -76,7 +78,7 @@ const LogIn = () => {
       <p>
         Forgot your password?
         <Link
-          to='/home'
+          to="/home"
           onClick={handleResetPassword}
           className="text-primary ms-2 pe-auto text-decoration-none"
         >
