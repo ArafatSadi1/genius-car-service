@@ -9,6 +9,7 @@ import auth from "../../firebase.init";
 import SocialLogIn from "../SocialLogIn/SocialLogIn";
 import PageTitle from "../Shared/PageTitle/PageTitle";
 import axios from "axios";
+import useToken from "../../hooks/useToken";
 
 const LogIn = () => {
   const navigate = useNavigate();
@@ -18,28 +19,26 @@ const LogIn = () => {
     useSignInWithEmailAndPassword(auth);
   const [sendPasswordResetEmail] = useSendPasswordResetEmail(auth);
   const location = useLocation();
+  const [token] = useToken(user);
   let errorElement;
 
   const from = location.state?.from?.pathname || "/";
 
-  if (user) {
-    // navigate(from, { replace: true });
+  if (token) {
+    navigate(from, { replace: true });
   }
 
   if (error) {
     errorElement = <p className="text-danger">Error: {error.message}</p>;
   }
-  const handleLogIn = async(event) => {
+  const handleLogIn = async (event) => {
     event.preventDefault();
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
     await signInWithEmailAndPassword(email, password);
 
-    const {data} = await axios.post('http://localhost:5000/login', {email})
-    localStorage.setItem('accessToken', data.accessToken);
-    navigate(from, { replace: true });
   };
-  
+
   const handleResetPassword = async () => {
     const email = emailRef.current.value;
     await sendPasswordResetEmail(email);

@@ -56,7 +56,7 @@ const Header = () => {
               Manage
             </Nav.Link>
             <Nav.Link as={Link} to="order">
-              Order
+              Orders
             </Nav.Link>
               </>
             }

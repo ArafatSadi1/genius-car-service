@@ -4,13 +4,15 @@ import { useCreateUserWithEmailAndPassword, useSignInWithGoogle } from "react-fi
 import auth from '../../firebase.init'
 import "./Register.css";
 import SocialLogIn from "../SocialLogIn/SocialLogIn";
+import useToken from "../../hooks/useToken";
 
 const Register = () => {
   const [createUserWithEmailAndPassword, user, loading, error] =
     useCreateUserWithEmailAndPassword(auth);
   const navigate = useNavigate();
+  const [token] = useToken(user)
 
-    if(user){
+    if(token){
         navigate('/home')
     }
 
