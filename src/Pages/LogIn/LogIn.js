@@ -8,6 +8,7 @@ import {
 import auth from "../../firebase.init";
 import SocialLogIn from "../SocialLogIn/SocialLogIn";
 import PageTitle from "../Shared/PageTitle/PageTitle";
+import axios from "axios";
 
 const LogIn = () => {
   const navigate = useNavigate();
@@ -22,18 +23,23 @@ const LogIn = () => {
   const from = location.state?.from?.pathname || "/";
 
   if (user) {
-    navigate(from, { replace: true });
+    // navigate(from, { replace: true });
   }
 
   if (error) {
     errorElement = <p className="text-danger">Error: {error.message}</p>;
   }
-  const handleLogIn = (event) => {
+  const handleLogIn = async(event) => {
     event.preventDefault();
     const email = emailRef.current.value;
     const password = passwordRef.current.value;
-    signInWithEmailAndPassword(email, password);
+    await signInWithEmailAndPassword(email, password);
+
+    const {data} = await axios.post('http://localhost:5000/login', {email})
+    localStorage.setItem('accessToken', data.accessToken);
+    navigate(from, { replace: true });
   };
+  
   const handleResetPassword = async () => {
     const email = emailRef.current.value;
     await sendPasswordResetEmail(email);
